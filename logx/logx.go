@@ -2,14 +2,20 @@ package logx
 
 var logx Logger
 
+func init() {
+	if logx == nil {
+		SetLogger(Default())
+	}
+}
+
 type Logger interface {
 	Debug(i ...any)
 	Debugf(msg string, i ...any)
 
-	Info(i ...interface{})
+	Info(i ...any)
 	Infof(msg string, i ...any)
 
-	Error(i ...interface{})
+	Error(i ...any)
 	Errorf(msg string, i ...any)
 }
 

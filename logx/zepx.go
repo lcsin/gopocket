@@ -3,21 +3,23 @@ package logx
 import (
 	"fmt"
 	"os"
+	"path"
 	"time"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 type zapx struct {
 }
 
-func GetZapLogger() Logger {
-	zap.ReplaceGlobals(DefaultZapConsoleLogger())
+func Default(opts ...zap.Option) *zapx {
+	zap.ReplaceGlobals(defaultZapConsoleLogger(opts...))
 	return new(zapx)
 }
 
-func DefaultZapConsoleLogger() *zap.Logger {
+func defaultZapConsoleLogger(options ...zap.Option) *zap.Logger {
 	cfg := zapcore.EncoderConfig{
 		MessageKey:       "msg",
 		LevelKey:         "level",
@@ -31,8 +33,26 @@ func DefaultZapConsoleLogger() *zap.Logger {
 		EncodeName:       zapcore.FullNameEncoder,
 		ConsoleSeparator: "\t|\t",
 	}
-	core := zapcore.NewCore(zapcore.NewConsoleEncoder(cfg), zapcore.AddSync(os.Stdout), zap.InfoLevel)
-	return zap.New(core, zap.AddCaller(), zap.Development())
+
+	atomicLevel := zap.NewAtomicLevelAt(zapcore.DebugLevel)
+	core := zapcore.NewCore(
+		zapcore.NewConsoleEncoder(cfg),
+		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(defaultZapHook())),
+		atomicLevel,
+	)
+	return zap.New(core, zap.AddCaller(), zap.Development()).WithOptions(options...)
+}
+
+func defaultZapHook() *lumberjack.Logger {
+	dir := fmt.Sprintf("./log/%v.log", time.Now().Format(time.DateOnly))
+	_ = os.MkdirAll(path.Dir(dir), os.ModePerm)
+	return &lumberjack.Logger{
+		Filename:   dir,   // 日志文件路径
+		MaxSize:    100,   // 每个日志文件保存的最大尺寸 单位：M
+		MaxBackups: 10,    // 日志文件最多保存多少个备份
+		MaxAge:     30,    // 文件最多保存多少天
+		Compress:   false, // 是否压缩
+	}
 }
 
 func (z *zapx) Debug(a ...any) {
