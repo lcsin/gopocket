@@ -1,10 +1,24 @@
-package util
+package fileutil
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 )
 
+// IsExists 判断文件、目录是否存在
+func IsExists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if errors.Is(err, os.ErrNotExist) {
+		return false
+	}
+	return false
+}
+
+// CopyFile 拷贝文件
 func CopyFile(src, dst string) error {
 	srcinfo, err := os.Stat(src)
 	if err != nil {
