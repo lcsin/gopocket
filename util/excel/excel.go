@@ -18,14 +18,16 @@ func Import(fp, sheet string) ([][]string, error) {
 
 // Export excel导出
 // 字段数量只支持A~Z
-func Export(sheet, fp string, headers []string, cells map[string][]interface{}) error {
+func Export(sheet, fp string, headers []string, cells map[string][]interface{}, style func(f *excelize.File) error) error {
 	f := excelize.NewFile()
 	defer f.Close()
 
 	if _, err := f.NewSheet(sheet); err != nil {
 		return err
 	}
-	if err := f.SetColWidth(sheet, "A", string(byte('A'+len(headers))), 25); err != nil {
+
+	// 设置样式
+	if err := style(f); err != nil {
 		return err
 	}
 

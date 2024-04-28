@@ -3,6 +3,8 @@ package excel
 import (
 	"fmt"
 	"testing"
+
+	"github.com/xuri/excelize/v2"
 )
 
 const (
@@ -17,7 +19,12 @@ func TestExport(t *testing.T) {
 	cells["姓名"] = []interface{}{"张三", "李四", "王五"}
 	cells["年龄"] = []interface{}{18, 17, 19}
 
-	if err := Export(sheet, fp, headers, cells); err != nil {
+	if err := Export(sheet, fp, headers, cells, func(f *excelize.File) error {
+		if err := f.SetColWidth(sheet, "A", string(byte('A'+len(headers))), 25); err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
 		panic(err)
 	}
 }
