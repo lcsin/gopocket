@@ -27,8 +27,10 @@ func Export(sheet, fp string, headers []string, cells map[string][]interface{}, 
 	}
 
 	// 设置样式
-	if err := style(f); err != nil {
-		return err
+	if style != nil {
+		if err := style(f); err != nil {
+			return err
+		}
 	}
 
 	HMap := make(map[string]string, len(headers))
