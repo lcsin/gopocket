@@ -22,6 +22,7 @@ func SimpleTask(duration time.Duration, callback func()) {
 	}()
 }
 
+// CronTask Cron定时任务
 func CronTask(spec string, callback func()) {
 	c := cron.New(cron.WithSeconds())
 

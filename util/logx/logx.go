@@ -12,12 +12,9 @@ import (
 	"github.com/lcsin/gopocket/util/fileutil"
 )
 
-type logx struct {
-}
-
 const (
-	infoFormat  = "  [INFO]  ->  "
-	errorFormat = "  [ERROR]  ->  "
+	infoFormat  = "  INFO  "
+	errorFormat = "  ERROR  "
 )
 
 func Info(a ...any) {
@@ -53,9 +50,10 @@ func Errorf(format string, a ...any) {
 }
 
 func saveLog(msg, level string) {
-	now := time.Now().Format(time.DateOnly)
+	date := time.Now().Format(time.DateOnly)
+	dateTime := time.Now().Format(time.DateTime)
 	dir := "./log"
-	fname := fmt.Sprintf("%s/%s_%s.log", dir, now, level)
+	fname := fmt.Sprintf("%s/%s-%s.log", dir, date, level)
 	if !fileutil.IsExists(dir) {
 		os.MkdirAll(dir, os.ModePerm)
 	}
@@ -65,11 +63,10 @@ func saveLog(msg, level string) {
 
 	switch level {
 	case "info":
-		f.WriteString(msg + "\r\n")
+		f.WriteString(dateTime + msg + "\r\n")
 	case "error":
-		f.WriteString("========================== " + now + " ==========================\r\n")
-		f.WriteString(msg + "\r\n")
+		f.WriteString("========================================================================================\r\n")
+		f.WriteString(dateTime + msg + "\r\n")
 		f.WriteString(string(debug.Stack()) + "\r\n")
-		f.WriteString("========================== end ==========================\r\n")
 	}
 }
