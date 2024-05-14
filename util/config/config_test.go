@@ -2,8 +2,11 @@ package config
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
+	"time"
+
+	"github.com/fsnotify/fsnotify"
+	"github.com/spf13/viper"
 )
 
 type Cfg struct {
@@ -21,26 +24,28 @@ type Cfg struct {
 	}
 }
 
+var cfg Cfg
+
 func TestConfig(t *testing.T) {
-	var cfg Cfg
-
-	ret := reflect.TypeOf(&cfg).Elem()
-	if ret.Kind() == reflect.Struct {
-		for i := 0; i < ret.NumField(); i++ {
-			field := ret.Field(i)
-			fieldRet := reflect.TypeOf(field)
-			if fieldRet.Kind() == reflect.Struct {
-				for i := 0; i < fieldRet.NumField(); i++ {
-					fmt.Println(fieldRet.Field(i).Type)
-				}
-			}
-		}
+	viper.SetConfigFile("./config.yaml")
+	if err := viper.ReadInConfig(); err != nil {
+		panic(err)
 	}
+	if err := viper.Unmarshal(&cfg); err != nil {
+		panic(err)
+	}
+	viper.WatchConfig()
+	viper.OnConfigChange(func(in fsnotify.Event) {
+		_ = viper.Unmarshal(&cfg)
+	})
 
-	//if ret.Elem().Kind() == reflect.Struct {
-	//	for i := 0; i < ret.Elem().NumField(); i++ {
-	//		fmt.Println(ret.Elem().Field(i).Name, ret.Elem().Field(i).Type)
-	//	}
-	//}
+	time.Sleep(time.Second)
+	go func() {
+		for {
+			fmt.Println(cfg.App, cfg.Nacos)
+			time.Sleep(time.Second)
+		}
+	}()
 
+	select {}
 }

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"os/exec"
 )
 
@@ -10,7 +10,6 @@ const (
 	git   = "git"
 	clone = "clone"
 	pull  = "pull"
-	push  = "push"
 )
 
 func GitClone(ctx context.Context, url, branch string, path string) error {
@@ -25,7 +24,7 @@ func GitClone(ctx context.Context, url, branch string, path string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(output))
+	log.Println(string(output))
 
 	return nil
 }
@@ -39,7 +38,7 @@ func GitPull(ctx context.Context, path string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(string(output))
+	log.Println(string(output))
 
 	return nil
 }
