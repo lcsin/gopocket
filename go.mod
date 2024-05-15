@@ -10,6 +10,8 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/xuri/excelize/v2 v2.8.1
 	go.uber.org/zap v1.26.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20231106174013-bbf56f31fb17
+	google.golang.org/protobuf v1.31.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -56,6 +58,6 @@ require (
 	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/genproto v0.0.0-20231106174013-bbf56f31fb17 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
