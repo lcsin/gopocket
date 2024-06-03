@@ -59,3 +59,92 @@ func Export(sheet, fp string, headers []string, cells map[string][]interface{}, 
 
 	return f.SaveAs(fp)
 }
+
+// StreamExport 流式导出
+func StreamExport(sheet, fp string, headers []interface{}, rows [][]interface{}) error {
+	f := excelize.NewFile()
+	defer f.Close()
+
+	if _, err := f.NewSheet(sheet); err != nil {
+		return err
+	}
+	sw, err := f.NewStreamWriter(sheet)
+	if err != nil {
+		return err
+	}
+
+	// 表头
+	cell, err := excelize.CoordinatesToCellName(1, 1)
+	if err != nil {
+		return err
+	}
+	if err = sw.SetRow(cell, headers); err != nil {
+		return err
+	}
+	// 内容
+	for i, row := range rows {
+		cell, _ = excelize.CoordinatesToCellName(1, i+2)
+		if err = sw.SetRow(cell, row); err != nil {
+			return err
+		}
+	}
+	if err = sw.Flush(); err != nil {
+		return err
+	}
+
+	_ = f.DeleteSheet("Sheet1")
+	return f.SaveAs(fp)
+}
+
+// StreamExportMultiSheet 多sheet流式导出
+func StreamExportMultiSheet(sheet, fp string, headers []interface{}, rows [][]interface{}, size int) error {
+	f := excelize.NewFile()
+	defer f.Close()
+
+	var num int
+	if len(rows)%size == 0 {
+		num = len(rows) / size
+	} else {
+		num = len(rows)/size + 1
+	}
+
+	for i := 1; i <= num; i++ {
+		sheetName := fmt.Sprintf("%v%v", sheet, i)
+		if _, err := f.NewSheet(sheetName); err != nil {
+			return err
+		}
+		sw, err := f.NewStreamWriter(sheetName)
+		if err != nil {
+			return err
+		}
+
+		// 表头
+		cell, err := excelize.CoordinatesToCellName(1, 1)
+		if err != nil {
+			return err
+		}
+		if err = sw.SetRow(cell, headers); err != nil {
+			return err
+		}
+		// 内容
+		var data [][]interface{}
+		if i == num {
+			data = rows[(i-1)*size:]
+		} else {
+			data = rows[(i-1)*size : i*size]
+		}
+
+		for j, row := range data {
+			cell, _ = excelize.CoordinatesToCellName(1, j+2)
+			if err = sw.SetRow(cell, row); err != nil {
+				return err
+			}
+		}
+		if err = sw.Flush(); err != nil {
+			return err
+		}
+	}
+
+	_ = f.DeleteSheet("Sheet1")
+	return f.SaveAs(fp)
+}
