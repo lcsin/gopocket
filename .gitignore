@@ -3,3 +3,4 @@ logx/log
 /util/logx/log/
 /util/excel/test.xlsx
 /main.go
+*.exe

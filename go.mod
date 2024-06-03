@@ -6,9 +6,7 @@ require (
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.2.0
-	github.com/gomodule/redigo v1.9.2
 	github.com/gookit/color v1.5.4
-	github.com/gorilla/websocket v1.5.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.18.2
 	github.com/xuri/excelize/v2 v2.8.1
