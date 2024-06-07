@@ -29,3 +29,14 @@ func Parse(token string, key []byte) (*jwt.Token, error) {
 		return key, nil
 	})
 }
+
+func Claims(token string, key []byte) (map[string]interface{}, error) {
+	_token, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return key, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return _token.Claims.(jwt.MapClaims), nil
+}
