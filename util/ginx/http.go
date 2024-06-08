@@ -7,24 +7,40 @@ import (
 )
 
 type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Code    ErrCode `json:"code"`
+	State   bool    `json:"state"`
+	Message string  `json:"message"`
+	Data    any     `json:"data"`
 }
 
-func OK(c *gin.Context, data interface{}) {
+func ResponseOK(c *gin.Context, data interface{}) {
 	resp := Response{
-		Code:    0,
-		Message: "ok",
+		Code:    ErrSuccess,
+		State:   true,
+		Message: ErrSuccess.String(),
 		Data:    data,
 	}
 	c.JSON(http.StatusOK, resp)
 }
 
-func Error(c *gin.Context, code int, errmsg string) {
+func ResponseError(c *gin.Context, code ErrCode) {
 	resp := Response{
 		Code:    code,
-		Message: errmsg,
+		State:   false,
+		Message: code.String(),
+		Data:    nil,
+	}
+	c.JSON(http.StatusOK, resp)
+}
+
+func ResponseErrorMessage(c *gin.Context, code ErrCode, message string) {
+	if message == "" {
+		message = code.String()
+	}
+	resp := Response{
+		Code:    code,
+		State:   false,
+		Message: message,
 		Data:    nil,
 	}
 	c.JSON(http.StatusOK, resp)
