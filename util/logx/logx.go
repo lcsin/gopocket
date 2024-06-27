@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/gookit/color"
-	"github.com/lcsin/gopocket/util/fileutil"
+	"github.com/lcsin/gopocket/fileutil"
 )
 
 const (
@@ -54,7 +54,7 @@ func saveLog(msg, level string) {
 	dateTime := time.Now().Format(time.DateTime)
 	dir := "./log"
 	fname := fmt.Sprintf("%s/%s-%s.log", dir, date, level)
-	if !fileutil.IsExists(dir) {
+	if fileutil.PathExists(dir) {
 		os.MkdirAll(dir, os.ModePerm)
 	}
 
