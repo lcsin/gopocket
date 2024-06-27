@@ -1,5 +1,5 @@
 .idea
-logx/log
+util/zapx/log
 /util/logx/log/
 /util/excel/test.xlsx
 /main.go
