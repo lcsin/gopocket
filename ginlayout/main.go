@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/lcsin/ginlayout/ioc"
-	"github.com/lcsin/gopocket/httpx"
+	"github.com/lcsin/gopocket/pocket/httpx"
 	"github.com/spf13/viper"
 )
 

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/lcsin/ginlayout/internal/domain"
-	"github.com/lcsin/gopocket/ginx"
+	"github.com/lcsin/gopocket/pocket/ginx"
 	"github.com/spf13/viper"
 )
 
