@@ -31,7 +31,9 @@ func TestContainChinese(t *testing.T) {
 
 func TestIsBalancedChars(t *testing.T) {
 	text := "{【sfsf】}cxfdsaf[23432],(sfsdf)sfsdf"
-	fmt.Println(isBalancedChars(text, "{}", "[]", "()", "【】"))
+	fmt.Println(BalancedChars(text, "{}", "[]", "()", "【】"))
+	fmt.Println(IsBalancedChars(text))
 	text = "{【sfsf】}cxfdsaf[23432],(sfsdf)sfsdf)"
-	fmt.Println(isBalancedChars(text, "{}", "[]", "()", "【】"))
+	fmt.Println(BalancedChars(text, "{}", "[]", "()", "【】"))
+	fmt.Println(IsBalancedChars(text))
 }

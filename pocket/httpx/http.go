@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/lcsin/gopocket/cryptor"
+	"github.com/lcsin/gopocket/pocket/cryptor"
 )
 
 func POSTJson(url string, body []byte) ([]byte, error) {

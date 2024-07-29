@@ -27,7 +27,7 @@ func ZipFiles(src []string, dst string) error {
 	defer zipWriter.Close()
 
 	for _, file := range src {
-		err = addFile2ZipWithoutDir(zipWriter, file)
+		err = addFile2ZipWithDir(zipWriter, file)
 		if err != nil {
 			return err
 		}

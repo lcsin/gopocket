@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/gookit/color"
-	"github.com/lcsin/gopocket/fileutil"
+	"github.com/lcsin/gopocket/pocket/fileutil"
 )
 
 const (
