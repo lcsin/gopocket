@@ -38,7 +38,6 @@ func ZipFiles(src []string, dst string) error {
 
 // ZipDir 压缩目录
 func ZipDir(dir, dst string) error {
-	// Create a new zip archive.
 	zipFile, err := os.Create(dst)
 	if err != nil {
 		return err
@@ -48,38 +47,33 @@ func ZipDir(dir, dst string) error {
 	zipWriter := zip.NewWriter(zipFile)
 	defer zipWriter.Close()
 
-	// Walk through the source directory.
 	if err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 
-		// Create a header for the file or directory.
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {
 			return err
 		}
 
-		// Use the relative path as the header name.
+		// 获取两个路径中的相对路径
 		header.Name, err = filepath.Rel(filepath.Dir(dir), path)
 		if err != nil {
 			return err
 		}
 
-		// Adjust header attributes.
 		if info.IsDir() {
 			header.Name += "/"
 		} else {
 			header.Method = zip.Deflate
 		}
 
-		// Create a writer for the file in the zip archive.
 		writer, err := zipWriter.CreateHeader(header)
 		if err != nil {
 			return err
 		}
 
-		// If it's a file, copy the file content to the zip writer.
 		if !info.IsDir() {
 			file, err := os.Open(path)
 			if err != nil {

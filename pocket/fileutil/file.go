@@ -19,7 +19,7 @@ func PathExists(src string) bool {
 
 // CopyFile 拷贝文件
 func CopyFile(src, dst string) error {
-	srcinfo, err := os.Stat(src)
+	info, err := os.Stat(src)
 	if err != nil {
 		return err
 	}
@@ -29,17 +29,17 @@ func CopyFile(src, dst string) error {
 		return err
 	}
 
-	return os.WriteFile(dst, buf, srcinfo.Mode())
+	return os.WriteFile(dst, buf, info.Mode())
 }
 
 // CopyDir 拷贝目录
 func CopyDir(src, dst string, ignores []string) error {
-	srcinfo, err := os.Stat(src)
+	info, err := os.Stat(src)
 	if err != nil {
 		return err
 	}
 
-	err = os.MkdirAll(dst, srcinfo.Mode())
+	err = os.MkdirAll(dst, info.Mode())
 	if err != nil {
 		return err
 	}
