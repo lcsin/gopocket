@@ -1,6 +1,8 @@
 package fileutil
 
-import "testing"
+import (
+	"testing"
+)
 
 const dst = "./archive.zip"
 

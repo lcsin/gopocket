@@ -10,6 +10,8 @@ func TestIsNumber(t *testing.T) {
 		"123124324",
 		"hello，world",
 		"2342，hello",
+		"-1",
+		"0",
 	}
 
 	for _, text := range texts {
